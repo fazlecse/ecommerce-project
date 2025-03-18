@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -15,16 +14,21 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::middleware(['auth', AuthAdmin::class])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-    Route::get('/admin/brands',[AdminController::class, 'brands'])->name('admin.brands');
-    Route::get('admin/brand/add',[AdminController::class, 'add_brand'])->name('admin.brand.add');
-    Route::post('admin/brand/store',[AdminController::class,'brand_store'])->name('admin.brand.store');
+    Route::get('/admin/brands', [AdminController::class, 'brands'])->name('admin.brands');
+    Route::get('/admin/brand/add', [AdminController::class, 'add_brand'])->name('admin.brand.add');
+    Route::post('/admin/brand/store', [AdminController::class, 'brand_store'])->name('admin.brand.store');
+    Route::get('/admin.brand.edit/{id}', [AdminController::class, 'brand_edit'])->name('admin.brand.edit');
+    Route::put('/admin.brand.update',[AdminController::class, 'brand_update'])->name('admin.brand.update');
 });
+
 
 
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
