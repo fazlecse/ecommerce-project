@@ -32,12 +32,13 @@
                             </div>
                         </form>
                     </div>
-                    <a class="tf-button style-1 w208" href="{{ route('admin.brand.add') }}"><i class="icon-plus"></i>Add new</a>
+                    <a class="tf-button style-1 w208" href="{{ route('admin.brand.add') }}"><i class="icon-plus"></i>Add
+                        new</a>
                 </div>
                 <div class="wg-table table-all-user">
                     <div class="table-responsive">
                         @if (Session::has('status'))
-                            <p class="alert alert-success">{{Session::get('status')}}</p>
+                            <p class="alert alert-success">{{ Session::get('status') }}</p>
                         @endif
                         <table class="table table-striped table-bordered">
                             <thead>
@@ -66,12 +67,15 @@
                                         <td><a href="#" target="_blank">0</a></td>
                                         <td>
                                             <div class="list-icon-function">
-                                                <a href="{{ route('admin.brand.edit',['id'=>$brand->id]) }}">
+                                                <a href="{{ route('admin.brand.edit', ['id' => $brand->id]) }}">
                                                     <div class="item edit">
                                                         <i class="icon-edit-3"></i>
                                                     </div>
                                                 </a>
-                                                <form action="#" method="POST">
+                                                <form action="{{ route('admin.brand.delete', ['id' => $brand->id]) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
                                                     <div class="item text-danger delete">
                                                         <i class="icon-trash-2"></i>
                                                     </div>
@@ -92,3 +96,25 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(function() {
+            $('.delete').on('click', function(e) {
+                e.preventDefault();
+                let form = $(this).closest('form');
+                swal({
+                    title: "Are you sure?",
+                    text: "You want to delete this record?",
+                    type: "warning",
+                    buttons: ["No", "Yes"],
+                    ConfirmButtonColor: "#dc3545"
+                }).then(function(result) {
+                    if (result) {
+                        form.submit();
+                    }
+                });
+            })
+        });
+    </script>
+@endpush
