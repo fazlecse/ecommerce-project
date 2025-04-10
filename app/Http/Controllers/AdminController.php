@@ -150,7 +150,7 @@ class AdminController extends Controller
             'slug' => 'required|unique:categories,slug,' . $request->id,
             'image' => 'mimes:png,jpg,jpeg:max:2048',
         ]);
-        $category = Brand::find($request->id);
+        $category = Category::find($request->id);
         $category->name = $request->name;
         $category->slug = Str::slug($request->name);
         if ($request->hasFile('image')) {
@@ -165,5 +165,14 @@ class AdminController extends Controller
         }
         $category->save();
         return redirect()->route('admin.categories')->with('status', 'Category has been Updated successfully!');
+    }
+    public function category_detlete($id)
+    {
+        $category = Category::find($id);
+        if (File::exists(public_path('uploads/categories') . '/' . $category->image)) {
+            File::delete(public_path('uploads/categories') . '/' . $category->image);
+        }
+        $category->delete();
+        return redirect()->route('admin.categories')->with('status', 'Category has been deleted successfully!');
     }
 }
